@@ -1,12 +1,14 @@
 import {  AfterViewInit, Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { IDeactivateGuard } from '../../shared/guard/form-deactivate.guard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tdf',
   templateUrl: './tdf.component.html',
   styleUrl: './tdf.component.css'
 })
-export class TdfComponent implements AfterViewInit{
+export class TdfComponent implements AfterViewInit,IDeactivateGuard{
   submitted:boolean=false;
   users:any[]=[]
   @ViewChild('userform') formObject!:NgForm;
@@ -60,5 +62,10 @@ export class TdfComponent implements AfterViewInit{
   }
   clear(){
     this.users=[]
+  }
+
+  canExit(){
+    if (this.formObject.form.dirty && !confirm("unsaved data, are you sure want to exit ?")) return false
+    return true
   }
 }
